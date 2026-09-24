@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import ExerciseCard from "@/app/components/exercises/ExerciseCard";
+import { ExerciseGridSkeleton } from "@/app/components/ui/LoadingStates";
 import { getExercises, type Exercise } from "@/lib/fitlog";
 
 const sortOptions = {
@@ -202,14 +203,7 @@ export default function HomePage() {
 
         {/* Workouts Grid or Loading/Empty state */}
         {loading ? (
-          <div className="flex min-h-[300px] flex-col items-center justify-center rounded-[24px] border border-white/[0.08] bg-[#141822]">
-            <div className="flex items-center gap-3 text-[#ccff00]">
-              <span className="h-6 w-6 animate-spin rounded-full border-2 border-[#ccff00] border-t-transparent" />
-              <span className="font-display text-sm uppercase tracking-[0.2em]">
-                Loading workouts…
-              </span>
-            </div>
-          </div>
+          <ExerciseGridSkeleton />
         ) : displayedExercises.length === 0 ? (
           <div className="flex min-h-[260px] flex-col items-center justify-center rounded-[24px] border border-dashed border-white/10 bg-[#141822] p-8 text-center">
             <p className="text-sm font-bold text-slate-300">
