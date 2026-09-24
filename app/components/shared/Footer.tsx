@@ -1,28 +1,30 @@
 import Image from "next/image";
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <footer className="mt-10 border-t border-white/8 bg-[#0C0D10] py-6 text-slate-300">
-      <div className="flex flex-col items-center justify-between gap-3 text-center md:flex-row md:text-left">
-        <div className="flex items-center gap-3">
-          <Image
-            src="/logo.png"
-            alt="FITLOG Logo"
-            width={24}
-            height={24}
-            className="h-6 w-6"
-          />
-          <span className="text-sm font-bold uppercase tracking-[0.14em] text-white">
+    <footer className="mt-auto w-full border-t border-white/[0.08] bg-[#0c0d10] py-8 text-slate-400">
+      <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6">
+        {/* Left: Brand Logo & Title */}
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#ccff00]/10 p-0.5">
+            <Image
+              src="/logo.png"
+              alt="FITLOG Logo"
+              width={20}
+              height={20}
+              className="h-5 w-5 object-contain"
+            />
+          </div>
+          <span className="font-display text-sm font-black uppercase tracking-wider text-white">
             FITLOG
           </span>
         </div>
-        <p className="text-sm">
-          © {new Date().getFullYear()} FitLog — Workout Library. Train hard, log
-          honest.
+
+        {/* Right: Copyright line */}
+        <p className="text-xs text-slate-400">
+          © 2026 FitLog — Workout Library. Train hard, log honest.
         </p>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

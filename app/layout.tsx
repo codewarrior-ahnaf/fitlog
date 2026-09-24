@@ -16,22 +16,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FitLog",
-  description: "Workout library with exercise details and progress tracking",
+  title: "FitLog — Workout Library & Daily Plan Tracker",
+  description:
+    "FitLog is a dark, no-nonsense gym companion: pick a lift, lock it into today's plan, and watch the week's work add up.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0C0D10] text-white">
-        <div className="mx-auto w-full max-w-[1600px] px-2 md:px-6">
-          <Navbar />
-          {children}
-          <Footer />
-        </div>
+      <body className="flex min-h-screen flex-col bg-[#0c0d10] text-white selection:bg-[#ccff00] selection:text-black">
+        <Navbar />
+        <div className="flex-1">{children}</div>
+        <Footer />
         <ToastProvider />
       </body>
     </html>
