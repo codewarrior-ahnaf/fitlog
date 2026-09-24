@@ -41,10 +41,10 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-screen flex-col bg-[#0c0d10] text-white selection:bg-[#ccff00] selection:text-black">
+      <body className="flex h-screen flex-col overflow-hidden bg-[#0c0d10] text-white selection:bg-[#ccff00] selection:text-black">
         <ImageProtection />
         <Navbar />
-        <div className="flex flex-1 flex-col">
+        <div className="fitlog-scroll flex min-h-0 flex-1 flex-col overflow-y-auto">
           {children}
           <Footer />
         </div>
