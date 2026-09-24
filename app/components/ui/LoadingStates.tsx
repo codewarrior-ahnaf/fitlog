@@ -41,8 +41,8 @@ export function NotFoundLoader() {
       aria-label="Loading route status"
       className="mb-6 flex flex-col items-center"
     >
-      <div className="relative flex h-20 w-20 items-center justify-center rounded-[24px] border border-[#ccff00]/30 bg-[#141822] shadow-[0_0_35px_rgba(204,255,0,0.12)]">
-        <span className="absolute inset-0 animate-ping rounded-[24px] border border-[#ccff00]/20" />
+      <div className="relative flex h-20 w-20 items-center justify-center rounded-3xl border border-[#ccff00]/30 bg-[#141822] shadow-[0_0_35px_rgba(204,255,0,0.12)]">
+        <span className="absolute inset-0 animate-ping rounded-3xl border border-[#ccff00]/20" />
         <Image
           src="/logo.png"
           alt=""
@@ -122,6 +122,50 @@ export function ExerciseGridSkeleton() {
         <ExerciseCardSkeleton key={index} />
       ))}
     </div>
+  );
+}
+
+export function ExerciseDetailSkeleton() {
+  return (
+    <main
+      aria-label="Loading exercise"
+      className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8"
+    >
+      <SkeletonBlock className="mb-6 h-4 w-36" />
+
+      <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
+        <SkeletonBlock className="aspect-square w-full rounded-[26px] lg:col-span-6" />
+
+        <div className="space-y-6 lg:col-span-6">
+          <div className="space-y-4">
+            <SkeletonBlock className="h-10 w-3/4 sm:h-12" />
+            <SkeletonBlock className="h-4 w-full" />
+            <SkeletonBlock className="h-4 w-5/6" />
+          </div>
+
+          <div className="flex gap-2">
+            <SkeletonBlock className="h-6 w-20 rounded-full" />
+            <SkeletonBlock className="h-6 w-24 rounded-full" />
+          </div>
+
+          <div className="space-y-2 rounded-[20px] border border-white/8 bg-[#141822] p-5">
+            {Array.from({ length: 7 }, (_, index) => (
+              <div key={index} className="flex justify-between py-2.5">
+                <SkeletonBlock className="h-3 w-20" />
+                <SkeletonBlock className="h-3 w-24" />
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-3">
+            <SkeletonBlock className="h-5 w-32" />
+            <SkeletonBlock className="h-4 w-full" />
+            <SkeletonBlock className="h-4 w-11/12" />
+            <SkeletonBlock className="h-4 w-4/5" />
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }
 

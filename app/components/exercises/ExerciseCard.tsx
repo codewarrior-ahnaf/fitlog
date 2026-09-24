@@ -1,11 +1,32 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import type { Exercise } from "@/lib/fitlog";
+
+function CardPendingOverlay() {
+  const { pending } = useLinkStatus();
+
+  if (!pending) return null;
+
+  return (
+    <div
+      aria-label="Loading exercise"
+      className="absolute inset-0 z-10 flex flex-col gap-4 bg-[#141821]/95 p-5"
+    >
+      <div className="h-56 w-full animate-pulse rounded bg-white/8" />
+      <div className="h-5 w-2/3 animate-pulse rounded bg-white/8" />
+      <div className="h-3 w-1/3 animate-pulse rounded bg-white/8" />
+    </div>
+  );
+}
 
 export default function ExerciseCard({ exercise }: { exercise: Exercise }) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-[22px] border border-white/8 bg-[#141821] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-[#ccff00]/40 hover:shadow-[0_15px_35px_rgba(204,255,0,0.08)]">
-      <Link href={`/exercises/${exercise.id}`} className="flex flex-1 flex-col">
+      <Link
+        href={`/exercises/${exercise.id}`}
+        className="relative flex flex-1 flex-col"
+      >
+        <CardPendingOverlay />
         {/* Card Image */}
         <div className="relative h-56 w-full overflow-hidden bg-[#0d0f14]">
           <Image
