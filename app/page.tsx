@@ -3,7 +3,10 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import ExerciseCard from "@/app/components/exercises/ExerciseCard";
-import { ExerciseGridSkeleton } from "@/app/components/ui/LoadingStates";
+import {
+  ExerciseGridSkeleton,
+  HomeHeroSkeleton,
+} from "@/app/components/ui/LoadingStates";
 import { getExercises, type Exercise } from "@/lib/fitlog";
 
 const sortOptions = {
@@ -51,66 +54,73 @@ export default function HomePage() {
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
       {/* 2. Hero / Banner (Top of the Home page) */}
       <section className="relative overflow-hidden rounded-[28px] border border-white/[0.08] bg-gradient-to-br from-[#141822] via-[#11141b] to-[#0d0f14] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] sm:p-10 lg:p-12">
-        {/* Subtle background glow */}
-        <div className="pointer-events-none absolute -right-20 -top-20 h-96 w-96 rounded-full bg-[#ccff00]/5 blur-3xl" />
+        {loading ? (
+          <HomeHeroSkeleton />
+        ) : (
+          <>
+            {/* Subtle background glow */}
+            <div className="pointer-events-none absolute -right-20 -top-20 h-96 w-96 rounded-full bg-[#ccff00]/5 blur-3xl" />
 
-        <div className="grid items-center gap-8 lg:grid-cols-12">
-          {/* Hero Left Column */}
-          <div className="space-y-6 lg:col-span-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#ccff00]/30 bg-[#ccff00]/10 px-3.5 py-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#ccff00] animate-pulse" />
-              <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#ccff00]">
-                WORKOUT LIBRARY
-              </span>
-            </div>
+            <div className="grid items-center gap-8 lg:grid-cols-12">
+              {/* Hero Left Column */}
+              <div className="space-y-6 lg:col-span-7">
+                <div className="inline-flex items-center gap-2 rounded-full border border-[#ccff00]/30 bg-[#ccff00]/10 px-3.5 py-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#ccff00] animate-pulse" />
+                  <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#ccff00]">
+                    WORKOUT LIBRARY
+                  </span>
+                </div>
 
-            <h1 className="font-display text-4xl font-black uppercase tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.05]">
-              TRAIN WITH INTENT. <br />
-              LOG EVERY SET.
-            </h1>
+                <h1 className="font-display text-4xl font-black uppercase tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.05]">
+                  TRAIN WITH INTENT. <br />
+                  LOG EVERY SET.
+                </h1>
 
-            <p className="max-w-xl text-sm leading-relaxed text-slate-300 sm:text-base">
-              FitLog is a dark, no-nonsense gym companion: pick a lift, lock it
-              into today&apos;s plan, and watch the week&apos;s work add up.
-            </p>
+                <p className="max-w-xl text-sm leading-relaxed text-slate-300 sm:text-base">
+                  FitLog is a dark, no-nonsense gym companion: pick a lift, lock
+                  it into today&apos;s plan, and watch the week&apos;s work add
+                  up.
+                </p>
 
-            <div className="pt-2">
-              <a
-                href="#library"
-                className="group inline-flex items-center gap-2.5 rounded-full bg-[#ccff00] px-7 py-3.5 text-xs font-black uppercase tracking-[0.16em] text-[#0b0c10] shadow-[0_4px_20px_rgba(204,255,0,0.25)] transition hover:bg-[#b8e600] active:scale-95"
-              >
-                <span>BROWSE WORKOUTS</span>
-                <svg
-                  className="h-4 w-4 transition-transform group-hover:translate-y-0.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                <div className="pt-2">
+                  <a
+                    href="#library"
+                    className="group inline-flex items-center gap-2.5 rounded-full bg-[#ccff00] px-7 py-3.5 text-xs font-black uppercase tracking-[0.16em] text-[#0b0c10] shadow-[0_4px_20px_rgba(204,255,0,0.25)] transition hover:bg-[#b8e600] active:scale-95"
+                  >
+                    <span>BROWSE WORKOUTS</span>
+                    <svg
+                      className="h-4 w-4 transition-transform group-hover:translate-y-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2.5}
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+              {/* Hero Right Column (Banner Illustration) */}
+              <div className="flex items-center justify-center lg:col-span-5">
+                <div className="relative flex h-[280px] w-full items-center justify-center sm:h-[340px] lg:h-[380px]">
+                  <Image
+                    src="/banner.png"
+                    alt="Fitness Athlete Training"
+                    width={420}
+                    height={420}
+                    className="h-full w-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
+                    priority
                   />
-                </svg>
-              </a>
+                </div>
+              </div>
             </div>
-          </div>
-
-          {/* Hero Right Column (Banner Illustration) */}
-          <div className="flex items-center justify-center lg:col-span-5">
-            <div className="relative flex h-[280px] w-full items-center justify-center sm:h-[340px] lg:h-[380px]">
-              <Image
-                src="/banner.png"
-                alt="Fitness Athlete Training"
-                width={420}
-                height={420}
-                className="h-full w-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
-                priority
-              />
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </section>
 
       {/* 3. The Library Section */}

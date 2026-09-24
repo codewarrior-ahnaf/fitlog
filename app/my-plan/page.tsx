@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { showToast } from "@/app/components/ui/ToastProvider";
+import { MyPlanSkeleton } from "@/app/components/ui/LoadingStates";
 import type { Exercise } from "@/lib/fitlog";
 import {
   addExerciseToPlan,
@@ -31,13 +32,16 @@ export default function MyPlanPage() {
   useEffect(() => {
     // Read state on client mount to avoid hydration mismatch
     const syncState = () => setState(readFitlogState());
-    syncState();
-    setIsLoaded(true);
+    const initialSync = window.requestAnimationFrame(() => {
+      syncState();
+      setIsLoaded(true);
+    });
 
     window.addEventListener("fitlog-state-change", syncState);
     window.addEventListener("storage", syncState);
 
     return () => {
+      window.cancelAnimationFrame(initialSync);
       window.removeEventListener("fitlog-state-change", syncState);
       window.removeEventListener("storage", syncState);
     };
@@ -105,16 +109,7 @@ export default function MyPlanPage() {
   };
 
   if (!isLoaded) {
-    return (
-      <main className="mx-auto flex min-h-[60vh] w-full max-w-7xl items-center justify-center px-4 py-16 text-white sm:px-6">
-        <div className="flex items-center gap-3 text-[#ccff00]">
-          <span className="h-6 w-6 animate-spin rounded-full border-2 border-[#ccff00] border-t-transparent" />
-          <span className="font-display text-sm uppercase tracking-[0.2em]">
-            Loading workouts…
-          </span>
-        </div>
-      </main>
-    );
+    return <MyPlanSkeleton />;
   }
 
   return (
@@ -276,7 +271,12 @@ export default function MyPlanPage() {
       {displayedExercises.length === 0 ? (
         <div className="flex min-h-[320px] flex-col items-center justify-center rounded-[26px] border border-dashed border-white/15 bg-[#141822]/60 p-8 text-center sm:p-12">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#ccff00]/10 text-[#ccff00]">
-            <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="h-8 w-8"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -307,8 +307,18 @@ export default function MyPlanPage() {
                 className="inline-flex items-center gap-2 rounded-full bg-[#ccff00] px-7 py-3.5 text-xs font-black uppercase tracking-wider text-[#0b0c10] shadow-[0_4px_20px_rgba(204,255,0,0.25)] transition hover:bg-[#b8e600] active:scale-95"
               >
                 <span>Go to workouts</span>
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
                 </svg>
               </Link>
             )}
@@ -364,21 +374,39 @@ export default function MyPlanPage() {
                   {/* Stats Row with icons */}
                   <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-slate-300">
                     <div className="flex items-center gap-1.5 font-medium">
-                      <svg className="h-3.5 w-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <svg
+                        className="h-3.5 w-3.5 text-slate-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
                       </svg>
                       <span>{exercise.duration} min</span>
                     </div>
 
                     <div className="flex items-center gap-1.5 font-medium">
-                      <svg className="h-3.5 w-3.5 text-amber-400" viewBox="0 0 24 24" fill="currentColor">
+                      <svg
+                        className="h-3.5 w-3.5 text-amber-400"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
                         <path d="M12 23c4.97 0 9-3.8 9-8.5C21 8.5 16 2 12 1 8 2 3 8.5 3 14.5 3 19.2 7.03 23 12 23zm0-18.42c2.47 2.15 6 6.94 6 9.92 0 3.31-2.69 6-6 6s-6-2.69-6-6c0-2.98 3.53-7.77 6-9.92z" />
                       </svg>
                       <span>{exercise.caloriesBurned} kcal</span>
                     </div>
 
                     <div className="flex items-center gap-1.5 font-medium">
-                      <svg className="h-3.5 w-3.5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                      <svg
+                        className="h-3.5 w-3.5 text-yellow-400"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
                         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                       </svg>
                       <span>{exercise.rating.toFixed(1)}</span>
@@ -407,8 +435,18 @@ export default function MyPlanPage() {
                           : "bg-[#ccff00] text-[#0b0c10] shadow-[0_2px_10px_rgba(204,255,0,0.2)] hover:bg-[#b8e600]"
                       }`}
                     >
-                      <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                       <span>{isDone ? "Done ✓" : "Mark as Done"}</span>
                     </button>
@@ -418,8 +456,18 @@ export default function MyPlanPage() {
                       onClick={() => handleMoveToPlan(exercise)}
                       className="inline-flex items-center gap-1.5 rounded-full bg-[#ccff00] px-4 py-2 text-xs font-black uppercase tracking-wider text-[#0b0c10] shadow-[0_2px_10px_rgba(204,255,0,0.2)] transition hover:bg-[#b8e600] active:scale-95"
                     >
-                      <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M12 4v16m8-8H4"
+                        />
                       </svg>
                       <span>Move to Plan</span>
                     </button>
@@ -429,11 +477,25 @@ export default function MyPlanPage() {
                   <button
                     onClick={() => handleRemove(exercise.id)}
                     className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-slate-400 transition hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-400 active:scale-90"
-                    title={tab === "plan" ? "Remove from today's plan" : "Remove from saved"}
+                    title={
+                      tab === "plan"
+                        ? "Remove from today's plan"
+                        : "Remove from saved"
+                    }
                     aria-label="Remove workout"
                   >
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                 </div>

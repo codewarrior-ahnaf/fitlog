@@ -39,6 +39,33 @@ function SkeletonBlock({ className = "" }: { className?: string }) {
   return <div className={`animate-pulse rounded bg-white/8 ${className}`} />;
 }
 
+export function HomeHeroSkeleton() {
+  return (
+    <div
+      aria-label="Loading workout library"
+      className="min-h-[390px] sm:min-h-[390px] lg:min-h-[404px]"
+    >
+      <div className="grid h-full items-center gap-8 lg:grid-cols-12">
+        <div className="space-y-6 lg:col-span-7">
+          <SkeletonBlock className="h-6 w-40 rounded-full" />
+          <div className="space-y-3">
+            <SkeletonBlock className="h-11 w-full max-w-xl sm:h-14" />
+            <SkeletonBlock className="h-11 w-4/5 max-w-lg sm:h-14" />
+          </div>
+          <div className="space-y-2">
+            <SkeletonBlock className="h-4 w-full max-w-xl" />
+            <SkeletonBlock className="h-4 w-4/5 max-w-lg" />
+          </div>
+          <SkeletonBlock className="h-12 w-48 rounded-full" />
+        </div>
+        <div className="flex justify-center lg:col-span-5">
+          <SkeletonBlock className="h-[280px] w-[280px] rounded-[32px] sm:h-[340px] sm:w-[340px] lg:h-[380px] lg:w-[380px]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ExerciseCardSkeleton() {
   return (
     <div className="overflow-hidden rounded-[22px] border border-white/8 bg-[#141821]">
@@ -72,5 +99,59 @@ export function ExerciseGridSkeleton() {
         <ExerciseCardSkeleton key={index} />
       ))}
     </div>
+  );
+}
+
+export function MyPlanSkeleton() {
+  return (
+    <main
+      aria-label="Loading your plan"
+      className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10"
+    >
+      <div className="mb-8 space-y-3">
+        <SkeletonBlock className="h-10 w-52 sm:h-12" />
+        <SkeletonBlock className="h-4 w-full max-w-md" />
+      </div>
+
+      <section className="mb-8 rounded-[22px] border border-white/8 bg-[#141822] p-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          {Array.from({ length: 3 }, (_, index) => (
+            <div key={index} className="space-y-3">
+              <SkeletonBlock className="h-3 w-20" />
+              <SkeletonBlock className="h-12 w-16" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <SkeletonBlock className="h-11 w-64 rounded-full" />
+        <SkeletonBlock className="h-9 w-32 rounded-full" />
+      </div>
+
+      <div className="space-y-4">
+        {Array.from({ length: 3 }, (_, index) => (
+          <div
+            key={index}
+            className="flex flex-col gap-4 rounded-[22px] border border-white/8 bg-[#141822] p-4 sm:p-5 md:flex-row md:items-center"
+          >
+            <SkeletonBlock className="h-28 w-full rounded-[16px] md:w-44" />
+            <div className="flex-1 space-y-3">
+              <SkeletonBlock className="h-5 w-2/3" />
+              <SkeletonBlock className="h-3 w-1/4" />
+              <div className="flex gap-4">
+                <SkeletonBlock className="h-3 w-16" />
+                <SkeletonBlock className="h-3 w-16" />
+                <SkeletonBlock className="h-3 w-10" />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <SkeletonBlock className="h-9 w-24 rounded-full" />
+              <SkeletonBlock className="h-9 w-28 rounded-full" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </main>
   );
 }
