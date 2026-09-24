@@ -4,7 +4,7 @@ import type { Exercise } from "@/lib/fitlog";
 
 export default function ExerciseCard({ exercise }: { exercise: Exercise }) {
   return (
-    <article className="group flex flex-col overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#141821] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-[#ccff00]/40 hover:shadow-[0_15px_35px_rgba(204,255,0,0.08)]">
+    <article className="group flex flex-col overflow-hidden rounded-[22px] border border-white/8 bg-[#141821] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-[#ccff00]/40 hover:shadow-[0_15px_35px_rgba(204,255,0,0.08)]">
       <Link href={`/exercises/${exercise.id}`} className="flex flex-1 flex-col">
         {/* Card Image */}
         <div className="relative h-56 w-full overflow-hidden bg-[#0d0f14]">
@@ -15,7 +15,7 @@ export default function ExerciseCard({ exercise }: { exercise: Exercise }) {
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#141821] via-transparent to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-linear-to-t from-[#141821] via-transparent to-transparent opacity-60" />
         </div>
 
         {/* Card Body */}
@@ -45,7 +45,7 @@ export default function ExerciseCard({ exercise }: { exercise: Exercise }) {
           </div>
 
           {/* Stats Row with icons */}
-          <div className="mt-5 flex items-center justify-between border-t border-white/[0.06] pt-3 text-xs text-slate-300">
+          <div className="mt-5 flex items-center justify-between border-t border-white/6 pt-3 text-xs text-slate-300">
             {/* Duration */}
             <div className="flex items-center gap-1.5 font-medium" title="Duration">
               <svg className="h-3.5 w-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

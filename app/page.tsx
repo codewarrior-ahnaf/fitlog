@@ -53,7 +53,7 @@ export default function HomePage() {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
       {/* 2. Hero / Banner (Top of the Home page) */}
-      <section className="relative overflow-hidden rounded-[28px] border border-white/[0.08] bg-gradient-to-br from-[#141822] via-[#11141b] to-[#0d0f14] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] sm:p-10 lg:p-12">
+      <section className="relative overflow-hidden rounded-[28px] border border-white/8 bg-linear-to-br from-[#141822] via-[#11141b] to-[#0d0f14] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] sm:p-10 lg:p-12">
         {loading ? (
           <HomeHeroSkeleton />
         ) : (
@@ -107,7 +107,7 @@ export default function HomePage() {
 
               {/* Hero Right Column (Banner Illustration) */}
               <div className="flex items-center justify-center lg:col-span-5">
-                <div className="relative flex h-[280px] w-full items-center justify-center sm:h-[340px] lg:h-[380px]">
+                <div className="relative flex h-70 w-full items-center justify-center sm:h-85 lg:h-95">
                   <Image
                     src="/banner.png"
                     alt="Fitness Athlete Training"
@@ -215,7 +215,7 @@ export default function HomePage() {
         {loading ? (
           <ExerciseGridSkeleton />
         ) : displayedExercises.length === 0 ? (
-          <div className="flex min-h-[260px] flex-col items-center justify-center rounded-[24px] border border-dashed border-white/10 bg-[#141822] p-8 text-center">
+          <div className="flex min-h-65 flex-col items-center justify-center rounded-3xl border border-dashed border-white/10 bg-[#141822] p-8 text-center">
             <p className="text-sm font-bold text-slate-300">
               No workouts found matching &quot;{searchQuery}&quot;
             </p>

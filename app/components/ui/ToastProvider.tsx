@@ -39,7 +39,7 @@ export default function ToastProvider() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed bottom-6 right-6 z-[100] flex max-w-sm flex-col gap-2.5">
+    <div className="pointer-events-none fixed bottom-6 right-6 z-100 flex max-w-sm flex-col gap-2.5">
       {toasts.map((toast) => (
         <div
           key={toast.id}

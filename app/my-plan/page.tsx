@@ -125,8 +125,8 @@ export default function MyPlanPage() {
       </div>
 
       {/* Metrics Summary Row (Unified 3-Column Card Matching Figma) */}
-      <section className="mb-8 overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#141822] p-6 shadow-[0_15px_35px_rgba(0,0,0,0.4)]">
-        <div className="grid grid-cols-1 divide-y divide-white/[0.06] text-center sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:text-left">
+      <section className="mb-8 overflow-hidden rounded-[22px] border border-white/8 bg-[#141822] p-6 shadow-[0_15px_35px_rgba(0,0,0,0.4)]">
+        <div className="grid grid-cols-1 divide-y divide-white/6 text-center sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:text-left">
           {/* Exercises metric - large lime green number */}
           <div className="pb-4 sm:pb-0 sm:pr-6">
             <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">
@@ -269,7 +269,7 @@ export default function MyPlanPage() {
 
       {/* Empty State */}
       {displayedExercises.length === 0 ? (
-        <div className="flex min-h-[320px] flex-col items-center justify-center rounded-[26px] border border-dashed border-white/15 bg-[#141822]/60 p-8 text-center sm:p-12">
+        <div className="flex min-h-80 flex-col items-center justify-center rounded-[26px] border border-dashed border-white/15 bg-[#141822]/60 p-8 text-center sm:p-12">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#ccff00]/10 text-[#ccff00]">
             <svg
               className="h-8 w-8"
@@ -333,12 +333,12 @@ export default function MyPlanPage() {
             return (
               <article
                 key={exercise.id}
-                className={`flex flex-col gap-4 rounded-[22px] border border-white/[0.08] bg-[#141822] p-4 shadow-md transition duration-200 hover:border-white/20 sm:p-5 md:flex-row md:items-center ${
+                className={`flex flex-col gap-4 rounded-[22px] border border-white/8 bg-[#141822] p-4 shadow-md transition duration-200 hover:border-white/20 sm:p-5 md:flex-row md:items-center ${
                   isDone ? "border-emerald-500/30 bg-[#141c1f]" : ""
                 }`}
               >
                 {/* Thumbnail */}
-                <div className="relative h-28 w-full overflow-hidden rounded-[16px] bg-[#0d0f14] md:w-44 md:shrink-0">
+                <div className="relative h-28 w-full overflow-hidden rounded-2xl bg-[#0d0f14] md:w-44 md:shrink-0">
                   <Image
                     src={exercise.image}
                     alt={exercise.name}

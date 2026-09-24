@@ -33,7 +33,7 @@ export default function Navbar() {
   const isPlanActive = pathname === "/my-plan";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0c0d10]/95 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-white/8 bg-[#0c0d10]/95 backdrop-blur-md">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
         {/* Left: Brand Logo */}
         <div className="flex items-center gap-3">
