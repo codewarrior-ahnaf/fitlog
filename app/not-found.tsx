@@ -25,13 +25,6 @@ export default function NotFound() {
           </svg>
           <span>Back to Library</span>
         </Link>
-
-        <Link
-          href="/my-plan"
-          className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-white transition hover:border-white/40 hover:bg-white/10 active:scale-95"
-        >
-          <span>View My Plan</span>
-        </Link>
       </div>
     </main>
   );

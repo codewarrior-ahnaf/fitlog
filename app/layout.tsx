@@ -20,7 +20,13 @@ export const metadata: Metadata = {
   description:
     "FitLog is a dark, no-nonsense gym companion: pick a lift, lock it into today's plan, and watch the week's work add up.",
   icons: {
-    icon: "/logo.png",
+    icon: [
+      {
+        url: "/logo.png",
+        type: "image/png",
+        sizes: "28x28",
+      },
+    ],
   },
 };
 
