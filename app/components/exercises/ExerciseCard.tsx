@@ -45,26 +45,55 @@ export default function ExerciseCard({ exercise }: { exercise: Exercise }) {
           </div>
 
           {/* Stats Row with icons */}
-          <div className="mt-5 flex items-center justify-between border-t border-white/6 pt-3 text-xs text-slate-300">
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 border-t border-white/6 pt-3 text-xs text-slate-300">
             {/* Duration */}
-            <div className="flex items-center gap-1.5 font-medium" title="Duration">
-              <svg className="h-3.5 w-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div
+              className="flex min-w-0 items-center gap-1.5 font-medium"
+              title="Duration"
+            >
+              <svg
+                className="h-3.5 w-3.5 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
-              <span>{exercise.duration} min</span>
+              <span className="whitespace-nowrap">{exercise.duration} min</span>
             </div>
 
             {/* Calories */}
-            <div className="flex items-center gap-1.5 font-medium" title="Calories Burned">
-              <svg className="h-3.5 w-3.5 text-amber-400" viewBox="0 0 24 24" fill="currentColor">
+            <div
+              className="flex min-w-0 items-center gap-1.5 font-medium"
+              title="Calories Burned"
+            >
+              <svg
+                className="h-3.5 w-3.5 text-amber-400"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
                 <path d="M12 23c4.97 0 9-3.8 9-8.5C21 8.5 16 2 12 1 8 2 3 8.5 3 14.5 3 19.2 7.03 23 12 23zm0-18.42c2.47 2.15 6 6.94 6 9.92 0 3.31-2.69 6-6 6s-6-2.69-6-6c0-2.98 3.53-7.77 6-9.92z" />
               </svg>
-              <span>{exercise.caloriesBurned} kcal</span>
+              <span className="whitespace-nowrap">
+                {exercise.caloriesBurned} kcal
+              </span>
             </div>
 
             {/* Rating */}
-            <div className="flex items-center gap-1.5 font-medium" title="Rating">
-              <svg className="h-3.5 w-3.5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+            <div
+              className="flex items-center gap-1.5 font-medium"
+              title="Rating"
+            >
+              <svg
+                className="h-3.5 w-3.5 text-yellow-400"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
               </svg>
               <span>{exercise.rating.toFixed(1)}</span>

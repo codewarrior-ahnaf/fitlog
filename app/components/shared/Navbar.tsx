@@ -29,12 +29,15 @@ export default function Navbar() {
     };
   }, []);
 
-  const isWorkoutActive = pathname === "/" || pathname.startsWith("/exercises") || pathname.startsWith("/workout");
+  const isWorkoutActive =
+    pathname === "/" ||
+    pathname.startsWith("/exercises") ||
+    pathname.startsWith("/workout");
   const isPlanActive = pathname === "/my-plan";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/8 bg-[#0c0d10]/95 backdrop-blur-md">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-2 px-3 sm:px-6">
         {/* Left: Brand Logo */}
         <div className="flex items-center gap-3">
           <Link
@@ -51,7 +54,7 @@ export default function Navbar() {
                 priority
               />
             </div>
-            <span className="font-display text-xl font-black uppercase tracking-wider text-white">
+            <span className="font-display text-lg font-black uppercase tracking-wider text-white sm:text-xl">
               FITLOG
             </span>
           </Link>
@@ -82,11 +85,11 @@ export default function Navbar() {
         </nav>
 
         {/* Right: Plan and Saved Badges */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
           {/* Plan badge (filled pill with accent background #ccff00) */}
           <Link
             href=""
-            className="flex items-center gap-1.5 rounded-full bg-[#ccff00] px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-[#0b0c10] shadow-[0_2px_10px_rgba(204,255,0,0.25)] transition hover:bg-[#b8e600] active:scale-95"
+            className="flex items-center gap-1 rounded-full bg-[#ccff00] px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-[#0b0c10] shadow-[0_2px_10px_rgba(204,255,0,0.25)] transition hover:bg-[#b8e600] active:scale-95 sm:gap-1.5 sm:px-3.5 sm:text-xs"
             title="View Today's Plan"
           >
             <span>Plan</span>
@@ -98,7 +101,7 @@ export default function Navbar() {
           {/* Saved badge (pill with outline/border only) */}
           <Link
             href=""
-            className="flex items-center gap-1.5 rounded-full border border-white/25 bg-transparent px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white transition hover:border-white/50 hover:bg-white/5 active:scale-95"
+            className="flex items-center gap-1 rounded-full border border-white/25 bg-transparent px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white transition hover:border-white/50 hover:bg-white/5 active:scale-95 sm:gap-1.5 sm:px-3.5 sm:text-xs"
             title="View Saved Workouts"
           >
             <span>Saved</span>
@@ -114,12 +117,32 @@ export default function Navbar() {
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? (
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             ) : (
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             )}
           </button>

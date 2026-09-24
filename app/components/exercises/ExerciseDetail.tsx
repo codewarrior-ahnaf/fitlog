@@ -75,8 +75,18 @@ export default function ExerciseDetail({ exercise }: { exercise: Exercise }) {
           href="/#library"
           className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 transition hover:text-[#ccff00]"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2.5}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
           </svg>
           <span>Back to library</span>
         </Link>
@@ -86,7 +96,7 @@ export default function ExerciseDetail({ exercise }: { exercise: Exercise }) {
       <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
         {/* Left Side: Visual / Media */}
         <div className="lg:col-span-6">
-          <div className="relative aspect-square w-full overflow-hidden rounded-[26px] border border-white/[0.08] bg-[#141822] shadow-[0_20px_45px_rgba(0,0,0,0.5)]">
+          <div className="relative aspect-square w-full overflow-hidden rounded-[26px] border border-white/8 bg-[#141822] shadow-[0_20px_45px_rgba(0,0,0,0.5)]">
             <Image
               src={exercise.image}
               alt={exercise.name}
@@ -124,64 +134,72 @@ export default function ExerciseDetail({ exercise }: { exercise: Exercise }) {
             </div>
 
             {/* Key Specs Table / Panel */}
-            <div className="rounded-[20px] border border-white/[0.08] bg-[#141822] p-5 shadow-inner">
-              <div className="divide-y divide-white/[0.06] text-xs">
-                <div className="flex items-center justify-between py-2.5">
+            <div className="rounded-[20px] border border-white/8 bg-[#141822] p-5 shadow-inner">
+              <div className="divide-y divide-white/6 text-xs">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
                   <span className="font-bold uppercase tracking-wider text-slate-400">
                     EQUIPMENT
                   </span>
-                  <span className="font-medium text-white">
+                  <span className="text-right font-medium text-white">
                     {exercise.equipment}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between py-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
                   <span className="font-bold uppercase tracking-wider text-slate-400">
                     DIFFICULTY
                   </span>
-                  <span className="font-medium text-white">
+                  <span className="text-right font-medium text-white">
                     {exercise.difficulty}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between py-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
                   <span className="font-bold uppercase tracking-wider text-slate-400">
                     SETS
                   </span>
-                  <span className="font-medium text-white">{exercise.sets}</span>
+                  <span className="font-medium text-white">
+                    {exercise.sets}
+                  </span>
                 </div>
 
-                <div className="flex items-center justify-between py-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
                   <span className="font-bold uppercase tracking-wider text-slate-400">
                     REPS
                   </span>
-                  <span className="font-medium text-white">{exercise.reps}</span>
+                  <span className="font-medium text-white">
+                    {exercise.reps}
+                  </span>
                 </div>
 
-                <div className="flex items-center justify-between py-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
                   <span className="font-bold uppercase tracking-wider text-slate-400">
                     DURATION
                   </span>
-                  <span className="font-medium text-white">
+                  <span className="text-right font-medium text-white">
                     {exercise.duration} min
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between py-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
                   <span className="font-bold uppercase tracking-wider text-slate-400">
                     CALORIES
                   </span>
-                  <span className="font-medium text-white">
+                  <span className="text-right font-medium text-white">
                     {exercise.caloriesBurned} kcal
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between py-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
                   <span className="font-bold uppercase tracking-wider text-slate-400">
                     RATING
                   </span>
                   <span className="flex items-center gap-1 font-medium text-white">
-                    <svg className="h-3.5 w-3.5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                    <svg
+                      className="h-3.5 w-3.5 text-yellow-400"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
                       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                     </svg>
                     {exercise.rating.toFixed(1)}
@@ -209,37 +227,67 @@ export default function ExerciseDetail({ exercise }: { exercise: Exercise }) {
           </div>
 
           {/* Call-To-Action Buttons */}
-          <div className="flex flex-wrap items-center gap-3 pt-3">
+          <div className="flex flex-col items-stretch gap-3 pt-3 sm:flex-row sm:flex-wrap sm:items-center">
             {/* Primary button: Add to today's plan */}
             <button
               onClick={handleAddToPlan}
               disabled={isPlanFull}
-              className={`inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-xs font-black uppercase tracking-wider transition active:scale-95 ${
+              className={`inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-xs font-black uppercase tracking-wider transition active:scale-95 sm:w-auto ${
                 isInPlan
                   ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
                   : isPlanFull
-                  ? "cursor-not-allowed bg-slate-700 text-slate-400 opacity-60"
-                  : "bg-[#ccff00] text-[#0b0c10] shadow-[0_4px_20px_rgba(204,255,0,0.25)] hover:bg-[#b8e600]"
+                    ? "cursor-not-allowed bg-slate-700 text-slate-400 opacity-60"
+                    : "bg-[#ccff00] text-[#0b0c10] shadow-[0_4px_20px_rgba(204,255,0,0.25)] hover:bg-[#b8e600]"
               }`}
             >
               {isInPlan ? (
                 <>
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                   <span>In Today&apos;s Plan</span>
                 </>
               ) : isPlanFull ? (
                 <>
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    />
                   </svg>
                   <span>Plan Full (Max 5)</span>
                 </>
               ) : (
                 <>
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                   <span>Add to today&apos;s plan</span>
                 </>
@@ -249,14 +297,24 @@ export default function ExerciseDetail({ exercise }: { exercise: Exercise }) {
             {/* Secondary button: Save for later */}
             <button
               onClick={handleSaveForLater}
-              className={`inline-flex items-center gap-2 rounded-full border px-6 py-3.5 text-xs font-bold uppercase tracking-wider transition active:scale-95 ${
+              className={`inline-flex w-full items-center justify-center gap-2 rounded-full border px-6 py-3.5 text-xs font-bold uppercase tracking-wider transition active:scale-95 sm:w-auto ${
                 isSaved
                   ? "border-[#ccff00]/60 bg-[#ccff00]/10 text-[#ccff00]"
                   : "border-white/20 bg-white/5 text-white hover:border-white/40 hover:bg-white/10"
               }`}
             >
-              <svg className="h-4 w-4" fill={isSaved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              <svg
+                className="h-4 w-4"
+                fill={isSaved ? "currentColor" : "none"}
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                />
               </svg>
               <span>{isSaved ? "Saved" : "Save for later"}</span>
             </button>
