@@ -111,6 +111,9 @@ export function MyPlanSkeleton() {
       <div className="mb-8 space-y-3">
         <SkeletonBlock className="h-10 w-52 sm:h-12" />
         <SkeletonBlock className="h-4 w-full max-w-md" />
+        <p className="pt-2 text-[10px] font-black uppercase tracking-[0.24em] text-[#ccff00]">
+          Loading workouts…
+        </p>
       </div>
 
       <section className="mb-8 rounded-[22px] border border-white/8 bg-[#141822] p-6">

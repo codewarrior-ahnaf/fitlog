@@ -88,7 +88,7 @@ export default function Navbar() {
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
           {/* Plan badge (filled pill with accent background #ccff00) */}
           <Link
-            href=""
+            href="/my-plan"
             className="flex items-center gap-1 rounded-full bg-[#ccff00] px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-[#0b0c10] shadow-[0_2px_10px_rgba(204,255,0,0.25)] transition hover:bg-[#b8e600] active:scale-95 sm:gap-1.5 sm:px-3.5 sm:text-xs"
             title="View Today's Plan"
           >
@@ -100,7 +100,7 @@ export default function Navbar() {
 
           {/* Saved badge (pill with outline/border only) */}
           <Link
-            href=""
+            href="/my-plan"
             className="flex items-center gap-1 rounded-full border border-white/25 bg-transparent px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white transition hover:border-white/50 hover:bg-white/5 active:scale-95 sm:gap-1.5 sm:px-3.5 sm:text-xs"
             title="View Saved Workouts"
           >
