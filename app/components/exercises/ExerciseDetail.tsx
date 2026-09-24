@@ -12,189 +12,257 @@ import {
 } from "@/lib/fitlog-storage";
 
 export default function ExerciseDetail({ exercise }: { exercise: Exercise }) {
+  const [isInPlan, setIsInPlan] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const [planCount, setPlanCount] = useState(0);
-  const [savedCount, setSavedCount] = useState(0);
 
   useEffect(() => {
-    const updateCounts = () => {
+    const syncState = () => {
       const state = readFitlogState();
+      setIsInPlan(state.plan.some((item) => item.id === exercise.id));
+      setIsSaved(state.saved.some((item) => item.id === exercise.id));
       setPlanCount(state.plan.length);
-      setSavedCount(state.saved.length);
     };
 
-    updateCounts();
-    window.addEventListener("fitlog-state-change", updateCounts);
-    return () =>
-      window.removeEventListener("fitlog-state-change", updateCounts);
-  }, []);
+    syncState();
+    window.addEventListener("fitlog-state-change", syncState);
+    window.addEventListener("storage", syncState);
+
+    return () => {
+      window.removeEventListener("fitlog-state-change", syncState);
+      window.removeEventListener("storage", syncState);
+    };
+  }, [exercise.id]);
 
   const handleAddToPlan = () => {
-    if (planCount >= 5) {
-      showToast("Today's plan is full. Remove one and try again.");
+    if (isInPlan) {
+      showToast("Already in today's plan");
       return;
     }
 
-    addExerciseToPlan(exercise);
-    showToast("Added to today's plan");
+    if (planCount >= 5) {
+      showToast("Today's plan is full (maximum 5 lifts).");
+      return;
+    }
+
+    const result = addExerciseToPlan(exercise);
+    if (result.ok) {
+      showToast("Added to today's plan");
+    } else if (result.reason === "limit_reached") {
+      showToast("Today's plan is full (maximum 5 lifts).");
+    }
   };
 
   const handleSaveForLater = () => {
-    addExerciseToSaved(exercise);
-    showToast("Saved for later");
+    if (isSaved) {
+      showToast("Already saved for later");
+      return;
+    }
+
+    const result = addExerciseToSaved(exercise);
+    if (result.ok) {
+      showToast("Saved for later");
+    }
   };
 
+  const isPlanFull = planCount >= 5 && !isInPlan;
+
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 text-white">
-      <div className="mb-6 flex items-center justify-between">
-        <Link href="/" className="text-sm text-lime-300 hover:text-lime-200">
-          ← Back to library
+    <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+      {/* Back to Library Navigation */}
+      <div className="mb-6">
+        <Link
+          href="/#library"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 transition hover:text-[#ccff00]"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>Back to library</span>
         </Link>
       </div>
 
-      <section className="overflow-hidden rounded-[28px] border border-white/8 bg-[#10141b] shadow-[0_18px_45px_rgba(0,0,0,0.42)]">
-        <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="relative min-h-[350px]">
+      {/* Two-Column Layout (Matching Figma Details Page) */}
+      <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
+        {/* Left Side: Visual / Media */}
+        <div className="lg:col-span-6">
+          <div className="relative aspect-square w-full overflow-hidden rounded-[26px] border border-white/[0.08] bg-[#141822] shadow-[0_20px_45px_rgba(0,0,0,0.5)]">
             <Image
               src={exercise.image}
               alt={exercise.name}
               fill
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 60vw"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              priority
             />
           </div>
+        </div>
 
-          <div className="space-y-6 p-6 md:p-8">
+        {/* Right Side: Details, Specs, Instructions, Actions */}
+        <div className="flex flex-col justify-between space-y-6 lg:col-span-6">
+          <div className="space-y-5">
+            {/* Title & Description */}
+            <div>
+              <h1 className="font-display text-3xl font-black uppercase tracking-tight text-white sm:text-4xl lg:text-5xl">
+                {exercise.name}
+              </h1>
+              <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base">
+                {exercise.description}
+              </p>
+            </div>
+
+            {/* Category Tags in filled neon lime pills */}
             <div className="flex flex-wrap items-center gap-2">
               {exercise.muscleGroups.map((group) => (
                 <span
                   key={group}
-                  className="rounded-full border border-lime-400/30 bg-lime-300/10 px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-lime-200"
+                  className="rounded-full bg-[#ccff00] px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#0b0c10]"
                 >
                   {group}
                 </span>
               ))}
             </div>
 
-            <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.2em] text-slate-400">
-                Workout
-              </p>
-              <h1 className="text-3xl font-black md:text-4xl uppercase">
-                {exercise.name}
-              </h1>
+            {/* Key Specs Table / Panel */}
+            <div className="rounded-[20px] border border-white/[0.08] bg-[#141822] p-5 shadow-inner">
+              <div className="divide-y divide-white/[0.06] text-xs">
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="font-bold uppercase tracking-wider text-slate-400">
+                    EQUIPMENT
+                  </span>
+                  <span className="font-medium text-white">
+                    {exercise.equipment}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="font-bold uppercase tracking-wider text-slate-400">
+                    DIFFICULTY
+                  </span>
+                  <span className="font-medium text-white">
+                    {exercise.difficulty}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="font-bold uppercase tracking-wider text-slate-400">
+                    SETS
+                  </span>
+                  <span className="font-medium text-white">{exercise.sets}</span>
+                </div>
+
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="font-bold uppercase tracking-wider text-slate-400">
+                    REPS
+                  </span>
+                  <span className="font-medium text-white">{exercise.reps}</span>
+                </div>
+
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="font-bold uppercase tracking-wider text-slate-400">
+                    DURATION
+                  </span>
+                  <span className="font-medium text-white">
+                    {exercise.duration} min
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="font-bold uppercase tracking-wider text-slate-400">
+                    CALORIES
+                  </span>
+                  <span className="font-medium text-white">
+                    {exercise.caloriesBurned} kcal
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between py-2.5">
+                  <span className="font-bold uppercase tracking-wider text-slate-400">
+                    RATING
+                  </span>
+                  <span className="flex items-center gap-1 font-medium text-white">
+                    <svg className="h-3.5 w-3.5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                    {exercise.rating.toFixed(1)}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            <p className="text-sm leading-7 text-slate-300">
-              {exercise.description}
-            </p>
-
-            <div className="grid grid-cols-2 gap-3 text-sm md:grid-cols-4">
-              <div className="rounded-2xl border border-white/8 bg-white/3 p-3">
-                <p className="text-slate-400">Equipment</p>
-                <p className="mt-2 font-semibold text-white">
-                  {exercise.equipment}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/8 bg-white/3 p-3">
-                <p className="text-slate-400">Difficulty</p>
-                <p className="mt-2 font-semibold text-white">
-                  {exercise.difficulty}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/8 bg-white/3 p-3">
-                <p className="text-slate-400">Sets</p>
-                <p className="mt-2 font-semibold text-white">{exercise.sets}</p>
-              </div>
-              <div className="rounded-2xl border border-white/8 bg-white/3 p-3">
-                <p className="text-slate-400">Reps</p>
-                <p className="mt-2 font-semibold text-white">{exercise.reps}</p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-3 pt-2">
-              <button
-                onClick={handleAddToPlan}
-                disabled={planCount >= 5}
-                className="inline-flex items-center gap-2 rounded-full bg-lime-300 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-[#0b0d10] transition hover:bg-lime-200 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <span>＋</span>
-                Add to today&apos;s plan
-              </button>
-
-              <button
-                onClick={handleSaveForLater}
-                className="inline-flex items-center gap-2 rounded-full border border-lime-300/60 bg-transparent px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-lime-300 hover:bg-lime-300/10"
-              >
-                <span>☆</span>
-                Save for later
-              </button>
+            {/* Instructions Section */}
+            <div className="space-y-3">
+              <h2 className="font-display text-base font-black uppercase tracking-wider text-white">
+                INSTRUCTIONS
+              </h2>
+              <ol className="space-y-2.5 text-xs sm:text-sm text-slate-300">
+                {exercise.instructions.map((step, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#ccff00]/15 text-[10px] font-black text-[#ccff00]">
+                      {index + 1}
+                    </span>
+                    <span className="leading-relaxed">{step}</span>
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section className="mt-8 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="rounded-[24px] border border-white/8 bg-[#10141b] p-6">
-          <h2 className="mb-4 text-xl font-bold text-white">Key Specs</h2>
-          <ul className="space-y-3 text-sm text-slate-300">
-            <li className="flex justify-between border-b border-white/8 pb-2">
-              <span>Equipment</span>
-              <span className="font-medium text-white">
-                {exercise.equipment}
-              </span>
-            </li>
-            <li className="flex justify-between border-b border-white/8 pb-2">
-              <span>Difficulty</span>
-              <span className="font-medium text-white">
-                {exercise.difficulty}
-              </span>
-            </li>
-            <li className="flex justify-between border-b border-white/8 pb-2">
-              <span>Sets</span>
-              <span className="font-medium text-white">{exercise.sets}</span>
-            </li>
-            <li className="flex justify-between border-b border-white/8 pb-2">
-              <span>Reps</span>
-              <span className="font-medium text-white">{exercise.reps}</span>
-            </li>
-            <li className="flex justify-between border-b border-white/8 pb-2">
-              <span>Duration</span>
-              <span className="font-medium text-white">
-                {exercise.duration} min
-              </span>
-            </li>
-            <li className="flex justify-between border-b border-white/8 pb-2">
-              <span>Calories</span>
-              <span className="font-medium text-white">
-                {exercise.caloriesBurned} kcal
-              </span>
-            </li>
-            <li className="flex justify-between">
-              <span>Rating</span>
-              <span className="font-medium text-white">
-                ★ {exercise.rating.toFixed(1)}
-              </span>
-            </li>
-          </ul>
-        </div>
+          {/* Call-To-Action Buttons */}
+          <div className="flex flex-wrap items-center gap-3 pt-3">
+            {/* Primary button: Add to today's plan */}
+            <button
+              onClick={handleAddToPlan}
+              disabled={isPlanFull}
+              className={`inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-xs font-black uppercase tracking-wider transition active:scale-95 ${
+                isInPlan
+                  ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
+                  : isPlanFull
+                  ? "cursor-not-allowed bg-slate-700 text-slate-400 opacity-60"
+                  : "bg-[#ccff00] text-[#0b0c10] shadow-[0_4px_20px_rgba(204,255,0,0.25)] hover:bg-[#b8e600]"
+              }`}
+            >
+              {isInPlan ? (
+                <>
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>In Today&apos;s Plan</span>
+                </>
+              ) : isPlanFull ? (
+                <>
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <span>Plan Full (Max 5)</span>
+                </>
+              ) : (
+                <>
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span>Add to today&apos;s plan</span>
+                </>
+              )}
+            </button>
 
-        <div className="rounded-[24px] border border-white/8 bg-[#10141b] p-6">
-          <h2 className="mb-4 text-xl font-bold text-white">Instructions</h2>
-          <ol className="space-y-4">
-            {exercise.instructions.map((step, index) => (
-              <li
-                key={step}
-                className="flex gap-3 text-sm leading-7 text-slate-300"
-              >
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-lime-300 text-xs font-black text-[#0b0d10]">
-                  {index + 1}
-                </span>
-                <span>{step}</span>
-              </li>
-            ))}
-          </ol>
+            {/* Secondary button: Save for later */}
+            <button
+              onClick={handleSaveForLater}
+              className={`inline-flex items-center gap-2 rounded-full border px-6 py-3.5 text-xs font-bold uppercase tracking-wider transition active:scale-95 ${
+                isSaved
+                  ? "border-[#ccff00]/60 bg-[#ccff00]/10 text-[#ccff00]"
+                  : "border-white/20 bg-white/5 text-white hover:border-white/40 hover:bg-white/10"
+              }`}
+            >
+              <svg className="h-4 w-4" fill={isSaved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
+              <span>{isSaved ? "Saved" : "Save for later"}</span>
+            </button>
+          </div>
         </div>
-      </section>
+      </div>
     </main>
   );
 }

@@ -1,78 +1,160 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { readFitlogState } from "@/lib/fitlog-storage";
 
-const Navbar = () => {
+export default function Navbar() {
+  const pathname = usePathname();
+  const [planCount, setPlanCount] = useState(0);
+  const [savedCount, setSavedCount] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const updateCounters = () => {
+      const state = readFitlogState();
+      setPlanCount(state.plan.length);
+      setSavedCount(state.saved.length);
+    };
+
+    updateCounters();
+    window.addEventListener("fitlog-state-change", updateCounters);
+    window.addEventListener("storage", updateCounters);
+
+    return () => {
+      window.removeEventListener("fitlog-state-change", updateCounters);
+      window.removeEventListener("storage", updateCounters);
+    };
+  }, []);
+
+  const isWorkoutActive = pathname === "/" || pathname.startsWith("/exercises") || pathname.startsWith("/workout");
+  const isPlanActive = pathname === "/my-plan";
+
   return (
-    <div className="navbar sticky top-0 z-50 border-b border-white/8 bg-[#0C0D10]/90 backdrop-blur-sm">
-      <div className="navbar-start">
-        <div className="dropdown lg:hidden">
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-            <svg
-              aria-label="Menu"
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
-            </svg>
-          </div>
-          <ul
-            tabIndex={-1}
-            className="menu menu-sm dropdown-content mt-3 w-52 rounded-box border border-white/8 bg-[#11161d] p-2 shadow-xl"
+    <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#0c0d10]/95 backdrop-blur-md">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
+        {/* Left: Brand Logo */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="/"
+            className="group flex items-center gap-2.5 transition active:scale-95"
           >
-            <li>
-              <Link href="/">Workouts</Link>
-            </li>
-            <li>
-              <Link href="/">My Plan</Link>
-            </li>
-          </ul>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ccff00]/10 p-1 transition group-hover:bg-[#ccff00]/20">
+              <Image
+                src="/logo.png"
+                alt="FitLog Logo"
+                width={24}
+                height={24}
+                className="h-6 w-6 object-contain"
+                priority
+              />
+            </div>
+            <span className="font-display text-xl font-black uppercase tracking-wider text-white">
+              FITLOG
+            </span>
+          </Link>
         </div>
 
-        <Link
-          href="/"
-          className="btn btn-ghost gap-2 px-2 text-xl text-white hover:bg-white/4"
-        >
-          <Image
-            src="/logo.png"
-            alt="FITLOG Logo"
-            width={28}
-            height={28}
-            className="h-7 w-7 object-contain"
-          />
-          <span className="font-black tracking-[0.12em]">FITLOG</span>
-        </Link>
+        {/* Center: Navigation Links */}
+        <nav className="hidden md:flex items-center gap-2">
+          <Link
+            href="/"
+            className={`rounded-full px-5 py-1.5 text-xs font-bold uppercase tracking-wider transition ${
+              isWorkoutActive
+                ? "border border-[#ccff00]/80 bg-[#ccff00]/15 text-[#ccff00] shadow-[0_0_15px_rgba(204,255,0,0.15)]"
+                : "text-slate-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            Workout
+          </Link>
+          <Link
+            href="/my-plan"
+            className={`rounded-full px-5 py-1.5 text-xs font-bold uppercase tracking-wider transition ${
+              isPlanActive
+                ? "border border-[#ccff00]/80 bg-[#ccff00]/15 text-[#ccff00] shadow-[0_0_15px_rgba(204,255,0,0.15)]"
+                : "text-slate-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            My Plan
+          </Link>
+        </nav>
+
+        {/* Right: Plan and Saved Badges */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Plan badge (filled pill with accent background #ccff00) */}
+          <Link
+            href="/my-plan"
+            className="flex items-center gap-1.5 rounded-full bg-[#ccff00] px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-[#0b0c10] shadow-[0_2px_10px_rgba(204,255,0,0.25)] transition hover:bg-[#b8e600] active:scale-95"
+            title="View Today's Plan"
+          >
+            <span>Plan</span>
+            <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-[#0b0c10]/20 px-1 text-[11px] font-black text-[#0b0c10]">
+              {planCount}
+            </span>
+          </Link>
+
+          {/* Saved badge (pill with outline/border only) */}
+          <Link
+            href="/my-plan"
+            className="flex items-center gap-1.5 rounded-full border border-white/25 bg-transparent px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white transition hover:border-white/50 hover:bg-white/5 active:scale-95"
+            title="View Saved Workouts"
+          >
+            <span>Saved</span>
+            <span className="flex h-4 min-w-4 items-center justify-center rounded-full border border-white/20 bg-white/10 px-1 text-[11px] font-bold text-white">
+              {savedCount}
+            </span>
+          </Link>
+
+          {/* Mobile hamburger menu button */}
+          <button
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-[#161a22] text-slate-300 md:hidden hover:text-white"
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? (
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
 
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal gap-2 px-1 text-sm text-slate-200">
-          <li>
-            <Link href="/" className="rounded-full hover:bg-white/5">
-              Workouts
+      {/* Mobile dropdown menu */}
+      {mobileMenuOpen && (
+        <div className="border-b border-white/10 bg-[#0e1117] px-4 py-4 md:hidden">
+          <div className="flex flex-col gap-2">
+            <Link
+              href="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`rounded-xl px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition ${
+                isWorkoutActive
+                  ? "border border-[#ccff00]/80 bg-[#ccff00]/15 text-[#ccff00]"
+                  : "text-slate-300 hover:bg-white/5"
+              }`}
+            >
+              Workout
             </Link>
-          </li>
-          <li>
-            <Link href="/" className="rounded-full hover:bg-white/5">
+            <Link
+              href="/my-plan"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`rounded-xl px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition ${
+                isPlanActive
+                  ? "border border-[#ccff00]/80 bg-[#ccff00]/15 text-[#ccff00]"
+                  : "text-slate-300 hover:bg-white/5"
+              }`}
+            >
               My Plan
             </Link>
-          </li>
-        </ul>
-      </div>
-
-      <div className="navbar-end">
-        <button className="rounded-full border border-lime-300/50 bg-lime-300 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#0b0d10] hover:bg-lime-200">
-          Start now
-        </button>
-      </div>
-    </div>
+          </div>
+        </div>
+      )}
+    </header>
   );
-};
-
-export default Navbar;
+}

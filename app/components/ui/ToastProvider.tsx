@@ -10,8 +10,10 @@ type Toast = {
 let toastId = 0;
 
 export function showToast(message: string) {
-  const event = new CustomEvent("fitlog-toast", { detail: { message } });
-  window.dispatchEvent(event);
+  if (typeof window !== "undefined") {
+    const event = new CustomEvent("fitlog-toast", { detail: { message } });
+    window.dispatchEvent(event);
+  }
 }
 
 export default function ToastProvider() {
@@ -22,16 +24,14 @@ export default function ToastProvider() {
       const customEvent = event as CustomEvent<{ message: string }>;
       const message = customEvent.detail?.message;
 
-      if (!message) {
-        return;
-      }
+      if (!message) return;
 
       const id = ++toastId;
       setToasts((current) => [...current, { id, message }]);
 
       setTimeout(() => {
         setToasts((current) => current.filter((toast) => toast.id !== id));
-      }, 2200);
+      }, 2500);
     };
 
     window.addEventListener("fitlog-toast", onToast);
@@ -39,13 +39,16 @@ export default function ToastProvider() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed bottom-5 right-5 z-[100] flex flex-col gap-3">
+    <div className="pointer-events-none fixed bottom-6 right-6 z-[100] flex max-w-sm flex-col gap-2.5">
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className="pointer-events-auto rounded-full border border-lime-300/60 bg-[#10151a] px-4 py-2 text-sm font-medium text-lime-300 shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
+          className="pointer-events-auto flex items-center gap-2.5 rounded-full border border-[#ccff00]/40 bg-[#12161f]/95 px-4 py-2.5 text-xs font-bold text-white shadow-[0_10px_35px_rgba(0,0,0,0.5)] backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-3"
         >
-          {toast.message}
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#ccff00] text-[10px] font-black text-[#0b0c10]">
+            ✓
+          </span>
+          <span className="tracking-wide">{toast.message}</span>
         </div>
       ))}
     </div>

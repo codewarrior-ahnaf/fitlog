@@ -38,21 +38,29 @@ export function readFitlogState(): FitlogStorageState {
   }
 }
 
-export function writeFitlogState(nextState: FitlogStorageState) {
+export function writeFitlogState(nextState: FitlogStorageState): FitlogStorageState {
   if (typeof window === "undefined") {
     return nextState;
   }
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+  } catch {
+    // Local storage quota or security error
+  }
   window.dispatchEvent(new CustomEvent("fitlog-state-change"));
   return nextState;
 }
 
-export function addExerciseToPlan(exercise: Exercise) {
+export function addExerciseToPlan(exercise: Exercise): { ok: boolean; reason?: "limit_reached" | "already_in_plan" } {
   const current = readFitlogState();
 
   if (current.plan.some((item) => item.id === exercise.id)) {
-    return current;
+    return { ok: false, reason: "already_in_plan" };
+  }
+
+  if (current.plan.length >= 5) {
+    return { ok: false, reason: "limit_reached" };
   }
 
   const next = {
@@ -60,14 +68,15 @@ export function addExerciseToPlan(exercise: Exercise) {
     plan: [...current.plan, exercise],
   };
 
-  return writeFitlogState(next);
+  writeFitlogState(next);
+  return { ok: true };
 }
 
-export function addExerciseToSaved(exercise: Exercise) {
+export function addExerciseToSaved(exercise: Exercise): { ok: boolean; reason?: "already_in_saved" } {
   const current = readFitlogState();
 
   if (current.saved.some((item) => item.id === exercise.id)) {
-    return current;
+    return { ok: false, reason: "already_in_saved" };
   }
 
   const next = {
@@ -75,20 +84,22 @@ export function addExerciseToSaved(exercise: Exercise) {
     saved: [...current.saved, exercise],
   };
 
-  return writeFitlogState(next);
+  writeFitlogState(next);
+  return { ok: true };
 }
 
-export function removeExerciseFromPlan(exerciseId: number) {
+export function removeExerciseFromPlan(exerciseId: number): FitlogStorageState {
   const current = readFitlogState();
   const next = {
     ...current,
     plan: current.plan.filter((item) => item.id !== exerciseId),
+    done: current.done.filter((id) => id !== exerciseId),
   };
 
   return writeFitlogState(next);
 }
 
-export function removeExerciseFromSaved(exerciseId: number) {
+export function removeExerciseFromSaved(exerciseId: number): FitlogStorageState {
   const current = readFitlogState();
   const next = {
     ...current,
@@ -98,7 +109,7 @@ export function removeExerciseFromSaved(exerciseId: number) {
   return writeFitlogState(next);
 }
 
-export function markExerciseDone(exerciseId: number) {
+export function markExerciseDone(exerciseId: number): { isDone: boolean; state: FitlogStorageState } {
   const current = readFitlogState();
   const exists = current.done.includes(exerciseId);
 
@@ -109,13 +120,14 @@ export function markExerciseDone(exerciseId: number) {
       : [...current.done, exerciseId],
   };
 
-  return writeFitlogState(next);
+  const written = writeFitlogState(next);
+  return { isDone: !exists, state: written };
 }
 
-export function totalMinutesFromExercises(exercises: Exercise[]) {
-  return exercises.reduce((sum, exercise) => sum + exercise.duration, 0);
+export function totalMinutesFromExercises(exercises: Exercise[]): number {
+  return exercises.reduce((sum, exercise) => sum + (exercise.duration || 0), 0);
 }
 
-export function totalCaloriesFromExercises(exercises: Exercise[]) {
-  return exercises.reduce((sum, exercise) => sum + exercise.caloriesBurned, 0);
+export function totalCaloriesFromExercises(exercises: Exercise[]): number {
+  return exercises.reduce((sum, exercise) => sum + (exercise.caloriesBurned || 0), 0);
 }
