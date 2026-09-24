@@ -2,6 +2,10 @@
 
 import { useEffect } from "react";
 
+function isProtectedDragTarget(target: EventTarget | null) {
+  return target instanceof HTMLElement && Boolean(target.closest("img, a"));
+}
+
 function isImageTarget(target: EventTarget | null) {
   return target instanceof HTMLElement && Boolean(target.closest("img"));
 }
@@ -9,7 +13,7 @@ function isImageTarget(target: EventTarget | null) {
 export default function ImageProtection() {
   useEffect(() => {
     const preventImageDrag = (event: DragEvent) => {
-      if (isImageTarget(event.target)) {
+      if (isProtectedDragTarget(event.target)) {
         event.preventDefault();
       }
     };

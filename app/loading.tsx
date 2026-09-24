@@ -1,3 +1,5 @@
+import { LoadingScreen } from "@/app/components/ui/LoadingStates";
+
 export default function Loading() {
-  return null;
+  return <LoadingScreen />;
 }
