@@ -287,6 +287,7 @@ export async function getExercises(): Promise<Exercise[]> {
   try {
     const response = await fetch(API_BASE_URL, {
       next: { revalidate: 60 },
+      signal: AbortSignal.timeout(8000),
     });
 
     if (!response.ok) {
@@ -321,6 +322,8 @@ export async function getExerciseById(id: string): Promise<Exercise | null> {
     // Fall back to local dataset
   }
 
-  const match = FALLBACK_EXERCISES.find((exercise) => exercise.id === numericId);
+  const match = FALLBACK_EXERCISES.find(
+    (exercise) => exercise.id === numericId,
+  );
   return match || null;
 }

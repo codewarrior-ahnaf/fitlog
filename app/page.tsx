@@ -6,6 +6,7 @@ import ExerciseCard from "@/app/components/exercises/ExerciseCard";
 import {
   ExerciseGridSkeleton,
   HomeHeroSkeleton,
+  LoadingScreen,
 } from "@/app/components/ui/LoadingStates";
 import SortSelect from "@/app/components/ui/SortSelect";
 import { getExercises, type Exercise } from "@/lib/fitlog";
@@ -21,8 +22,13 @@ export default function HomePage() {
   const [sortBy, setSortBy] = useState<keyof typeof sortOptions>("duration");
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [slowLoading, setSlowLoading] = useState(false);
 
   useEffect(() => {
+    const slowLoadingTimer = window.setTimeout(() => {
+      setSlowLoading(true);
+    }, 900);
+
     const loadExercises = async () => {
       try {
         const data = await getExercises();
@@ -31,10 +37,14 @@ export default function HomePage() {
         console.error(error);
       } finally {
         setLoading(false);
+        window.clearTimeout(slowLoadingTimer);
+        setSlowLoading(false);
       }
     };
 
     loadExercises();
+
+    return () => window.clearTimeout(slowLoadingTimer);
   }, []);
 
   const displayedExercises = useMemo(() => {
@@ -50,6 +60,10 @@ export default function HomePage() {
       })
       .sort(sortOptions[sortBy]);
   }, [exercises, sortBy, searchQuery]);
+
+  if (loading && slowLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10">

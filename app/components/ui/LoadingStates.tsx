@@ -35,6 +35,29 @@ export function LoadingScreen() {
   );
 }
 
+export function NotFoundLoader() {
+  return (
+    <div
+      aria-label="Loading route status"
+      className="mb-6 flex flex-col items-center"
+    >
+      <div className="relative flex h-20 w-20 items-center justify-center rounded-[24px] border border-[#ccff00]/30 bg-[#141822] shadow-[0_0_35px_rgba(204,255,0,0.12)]">
+        <span className="absolute inset-0 animate-ping rounded-[24px] border border-[#ccff00]/20" />
+        <Image
+          src="/logo.png"
+          alt=""
+          width={42}
+          height={42}
+          className="relative h-10 w-10 object-contain"
+        />
+      </div>
+      <div className="mt-4 h-1 w-24 overflow-hidden rounded-full bg-white/10">
+        <div className="h-full w-1/2 animate-[loading-bar_1.2s_ease-in-out_infinite] rounded-full bg-[#ccff00]" />
+      </div>
+    </div>
+  );
+}
+
 function SkeletonBlock({ className = "" }: { className?: string }) {
   return <div className={`animate-pulse rounded bg-white/8 ${className}`} />;
 }
@@ -43,7 +66,7 @@ export function HomeHeroSkeleton() {
   return (
     <div
       aria-label="Loading workout library"
-      className="min-h-[390px] sm:min-h-[390px] lg:min-h-[404px]"
+      className="min-h-97.5 sm:min-h-97.5 lg:min-h-101"
     >
       <div className="grid h-full items-center gap-8 lg:grid-cols-12">
         <div className="space-y-6 lg:col-span-7">
@@ -59,7 +82,7 @@ export function HomeHeroSkeleton() {
           <SkeletonBlock className="h-12 w-48 rounded-full" />
         </div>
         <div className="flex justify-center lg:col-span-5">
-          <SkeletonBlock className="h-[280px] w-[280px] rounded-[32px] sm:h-[340px] sm:w-[340px] lg:h-[380px] lg:w-[380px]" />
+          <SkeletonBlock className="h-70 w-70 rounded-4xl sm:h-85 sm:w-85 lg:h-95 lg:w-95" />
         </div>
       </div>
     </div>
@@ -138,7 +161,7 @@ export function MyPlanSkeleton() {
             key={index}
             className="flex flex-col gap-4 rounded-[22px] border border-white/8 bg-[#141822] p-4 sm:p-5 md:flex-row md:items-center"
           >
-            <SkeletonBlock className="h-28 w-full rounded-[16px] md:w-44" />
+            <SkeletonBlock className="h-28 w-full rounded-2xl md:w-44" />
             <div className="flex-1 space-y-3">
               <SkeletonBlock className="h-5 w-2/3" />
               <SkeletonBlock className="h-3 w-1/4" />
