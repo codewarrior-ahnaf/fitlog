@@ -7,6 +7,7 @@ import {
   ExerciseGridSkeleton,
   HomeHeroSkeleton,
 } from "@/app/components/ui/LoadingStates";
+import SortSelect from "@/app/components/ui/SortSelect";
 import { getExercises, type Exercise } from "@/lib/fitlog";
 
 const sortOptions = {
@@ -173,40 +174,18 @@ export default function HomePage() {
             {/* Sort Dropdown */}
             <label className="flex items-center gap-2 rounded-full border border-white/10 bg-[#141822] px-3.5 py-1.5 text-xs text-slate-300">
               <span className="font-medium text-slate-400">Sort By</span>
-              <div className="relative flex items-center">
-                <select
-                  aria-label="Sort workouts"
-                  value={sortBy}
-                  onChange={(event) =>
-                    setSortBy(event.target.value as keyof typeof sortOptions)
-                  }
-                  className="cursor-pointer appearance-none rounded-full bg-transparent pr-5 text-xs font-bold text-white outline-none"
-                >
-                  <option value="duration" className="bg-[#141822] text-white">
-                    Duration
-                  </option>
-                  <option value="calories" className="bg-[#141822] text-white">
-                    Calories
-                  </option>
-                  <option value="rating" className="bg-[#141822] text-white">
-                    Rating
-                  </option>
-                </select>
-                {/* Chevron icon */}
-                <svg
-                  className="pointer-events-none absolute right-0 h-3.5 w-3.5 text-[#ccff00]"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
+              <SortSelect
+                ariaLabel="Sort workouts"
+                value={sortBy}
+                onChange={(value) =>
+                  setSortBy(value as keyof typeof sortOptions)
+                }
+                options={[
+                  { value: "duration", label: "Duration" },
+                  { value: "calories", label: "Calories" },
+                  { value: "rating", label: "Rating" },
+                ]}
+              />
             </label>
           </div>
         </div>
