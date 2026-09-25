@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="mt-auto w-full border-t border-white/[0.08] bg-[#0c0d10] py-8 text-slate-400">
+    <footer className="mt-auto w-full border-t border-white/8 bg-[#0c0d10] py-8 text-slate-400">
       <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6">
         {/* Left: Brand Logo & Title */}
         <div className="flex items-center gap-2.5">
